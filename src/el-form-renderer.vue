@@ -1,21 +1,31 @@
 <template>
   <el-form ref="elForm" v-bind="$attrs" :model="value" class="el-form-renderer">
-    <template v-for="item in innerContent">
-      <slot :name="`id:${item.id}`" />
-      <slot :name="`$id:${item.id}`" />
-      <component
-        :is="item.type === GROUP ? 'render-form-group' : 'render-form-item'"
-        :key="item.id"
-        :data="item"
-        :value="value"
-        :item-value="value[item.id]"
-        :disabled="disabled || item.disabled"
-        :readonly="readonly || item.readonly"
-        :options="options[item.id]"
-        @updateValue="updateValue"
-      />
-    </template>
-    <slot />
+    <div :class="`content-${btsPosition}`">
+      <div :class="`flow-bts-${btsPosition}`">
+        <template v-for="item in innerContent">
+          <slot :name="`id:${item.id}`" />
+          <slot :name="`$id:${item.id}`" />
+
+          <!-- <div class="form-content" v-if="item.type === 'buttom'">
+
+          </div> -->
+          <component
+            :is="item.type === GROUP ? 'render-form-group' : 'render-form-item'"
+            :key="item.id"
+            :data="item"
+            :value="value"
+            :item-value="value[item.id]"
+            :disabled="disabled || item.disabled"
+            :readonly="readonly || item.readonly"
+            :options="options[item.id]"
+            @updateValue="updateValue"
+          />
+        </template>
+      </div>
+      <div :class="`btns-${btsPosition}`">
+        <slot />
+      </div>
+    </div>
   </el-form>
 </template>
 <script>
@@ -67,6 +77,10 @@ export default {
     form: {
       type: Object,
       default: undefined,
+    },
+    btsPosition: {
+      type: String,
+      default: 'basic',
     },
   },
   data() {
@@ -205,3 +219,26 @@ export default {
   },
 }
 </script>
+<style lang="less" scoped>
+.content {
+  &-basic {
+    display: block;
+  }
+
+  &-left {
+    display: flex;
+  }
+}
+// .flow-bts {
+//   &-left {
+//     // flex-grow: 1;
+//   }
+//   &-top {
+//   }
+// }
+.btns {
+  &-left {
+    flex-shrink: 0;
+  }
+}
+</style>

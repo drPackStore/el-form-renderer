@@ -43,17 +43,19 @@ export function transformOutputValue(value, content) {
   const newVal = {}
   Object.keys(value).forEach(id => {
     const item = content.find(item => item.id === id)
-    if (item.type !== 'group') {
-      if (item.outputFormat) {
-        const v = item.outputFormat(value[id])
-        // REVIEW: 仅根据 format 后的类型来判断赋值形式，有些隐晦
-        if (_isplainobject(v)) Object.assign(newVal, v)
-        else newVal[id] = v
+    if (item) {
+      if (item.type !== 'group') {
+        if (item.outputFormat) {
+          const v = item.outputFormat(value[id])
+          // REVIEW: 仅根据 format 后的类型来判断赋值形式，有些隐晦
+          if (_isplainobject(v)) Object.assign(newVal, v)
+          else newVal[id] = v
+        } else {
+          newVal[id] = value[id]
+        }
       } else {
-        newVal[id] = value[id]
+        newVal[id] = transformOutputValue(value[id], item.items)
       }
-    } else {
-      newVal[id] = transformOutputValue(value[id], item.items)
     }
   })
   return newVal

@@ -1,15 +1,15 @@
 {
-  "name": "@femessage/el-form-renderer",
-  "version": "1.5.5",
-  "description": "render form-item easily",
-  "author": "leezng <leezng@outlook.com>",
+  "name": "@drpackstore/el-form-renderer",
+  "version": "1.0.2",
+  "description": "dr私有化form组件",
+  "author": "drpackstore",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/FEMessage/el-form-renderer.git"
+    "url": "https://github.com/drPackStore/el-form-renderer.git"
   },
   "contributors": [
-    "https://github.com/FEMessage"
+    "https://github.com/drPackStore"
   ],
   "keywords": [
     "vue",
