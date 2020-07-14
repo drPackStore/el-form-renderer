@@ -21,6 +21,12 @@
         </template>
       </div>
     </template>
+    <search-select-input
+      v-else-if="data.type === 'select-input'"
+      :options="options"
+      :value="itemValue"
+      v-on="listeners"
+    />
     <custom-component
       v-else
       :component="data.component || `el-${data.type}`"
@@ -55,6 +61,7 @@
   </el-form-item>
 </template>
 <script>
+import searchSelectInput from './search-select-input.vue'
 import getEnableWhenStatus from '../util/enable-when'
 import {noop} from '../util/utils'
 import _get from 'lodash.get'
@@ -82,9 +89,15 @@ export default {
       functional: true,
       render: (h, ctx) => h(ctx.props.component, ctx.data, ctx.children),
     },
+    searchSelectInput,
   },
   props: {
-    data: Object,
+    data: {
+      type: Object,
+      default() {
+        return null
+      },
+    },
     prop: {
       type: String,
       default() {
@@ -124,6 +137,7 @@ export default {
       const {
         data: {
           id,
+          type,
           atChange = noop,
           on = {},
           on: {input: originOnInput = noop, change: originOnChange = noop} = {},
@@ -152,10 +166,21 @@ export default {
         },
         change: (value, ...rest) => {
           if (typeof value === 'string' && trim) value = value.trim()
-          this.$emit('updateValue', {id, value})
-          originOnChange([value, ...rest], updateForm)
+          if (type === 'select-input') {
+            this.$emit('updateValue', {
+              id,
+              value: {
+                id: value,
+                value: rest[0],
+              },
+            })
+            originOnChange([rest[0], []], updateForm)
+          } else {
+            this.$emit('updateValue', {id, value})
+            originOnChange([value, ...rest], updateForm)
 
-          // FIXME: rules 的 trigger 只写了 blur，依然会在 change 的时候触发校验！
+            // FIXME: rules 的 trigger 只写了 blur，依然会在 change 的时候触发校验！
+          }
           this.triggerValidate(id)
         },
       }

@@ -100,7 +100,15 @@ export default {
   },
   computed: {
     // 用于兼容数据操作
-    innerContent: ({content}) => transformContent(content),
+    innerContent: ({content}) => {
+      const data = transformContent(content)
+      data.map(i => {
+        if (i.type === 'select-input') {
+          i.id = 'select-input'
+        }
+      })
+      return data
+    },
   },
   watch: {
     form: {
@@ -121,6 +129,7 @@ export default {
     value: {
       handler(v, oldV) {
         if (!v || _isequal(v, oldV)) return
+
         this.$emit('input', transformOutputValue(v, this.innerContent))
       },
       // deep: true, // updateValue 是全量更新，所以不用
@@ -194,7 +203,12 @@ export default {
      * @public
      */
     getFormValue() {
-      return transformOutputValue(this.value, this.innerContent)
+      const data = transformOutputValue(this.value, this.innerContent)
+      if (Object.prototype.hasOwnProperty.call(data, 'select-input')) {
+        data[data['select-input'].id] = data['select-input'].value
+        delete data['select-input']
+      }
+      return data
     },
     /**
      * update form values
