@@ -243,13 +243,16 @@ export default {
     display: flex;
   }
 }
-// .flow-bts {
-//   &-left {
-//     // flex-grow: 1;
-//   }
-//   &-top {
-//   }
-// }
+
+.flow-bts {
+  &-left {
+    flex-wrap: wrap;
+    // flex-grow: 1;
+  }
+  // &-top {
+  // }
+}
+
 .btns {
   &-left {
     flex-shrink: 0;
