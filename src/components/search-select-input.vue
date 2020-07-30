@@ -17,6 +17,7 @@
     <el-input
       v-model="inputValue"
       class="search-select-input__input"
+      placeholder="请输入"
       @change="inputChange"
     />
   </div>
