@@ -73,6 +73,17 @@ export function transformInputValue(value, content) {
     if (item.inputFormat) {
       const v = item.inputFormat(value)
       if (v !== undefined) newVal[id] = v
+    } else if (item.type === 'select-input') {
+      // const selectVal = {}
+      const selectKey = item.options
+        .map(opt => opt.value)
+        .find(key => key in value)
+      if (selectKey) {
+        newVal[id] = {
+          id: selectKey,
+          value: value[selectKey],
+        }
+      }
     } else if (id in value) {
       if (item.type !== 'group') {
         newVal[id] = value[id]

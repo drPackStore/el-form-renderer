@@ -46,6 +46,9 @@ export default {
       if (!val) {
         this.selectValue = this.options[0].value
         this.inputValue = ''
+      } else {
+        this.selectValue = val.id
+        this.inputValue = val.value
       }
     },
   },

@@ -13,6 +13,19 @@ export default {
   data () {
     return {
       content: [
+         {
+            type: 'select-input',
+            el: {
+              placeholder: '请输入',
+            },
+            options: [
+              {value: 'saleOrderNo', label: 'sale Order No'},
+              {value: 'memberAccountId', label: 'member Account Id'},
+              {value: 'mobile', label: 'mobile'},
+              {value: 'consigneeMobile', label: 'cosignee mobile'},
+              {value: 'consignee', label: 'consignee'},
+            ],
+          },
         {
           type: 'input',
           id: 'name',
@@ -95,6 +108,10 @@ export default {
         }
       ]
     }
+  },
+  mounted() {
+    // 设置默认值
+    // this.$refs.ruleForm.updateForm({desc: 'fdisfjosf', mobile: 'fdsfhosjfd'})
   },
   methods: {
     submitForm(formName) {

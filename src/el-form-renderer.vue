@@ -103,11 +103,16 @@ export default {
     innerContent: ({content}) => {
       const data = transformContent(content)
       data.map(i => {
-        if (i.type === 'select-input') {
+        if (i.type === 'select-input' && !i.id) {
           i.id = 'select-input'
         }
       })
       return data
+    },
+    selectInputIds() {
+      return this.innerContent
+        .filter(item => item.type === 'select-input')
+        .map(item => item.id)
     },
   },
   watch: {
@@ -204,10 +209,13 @@ export default {
      */
     getFormValue() {
       const data = transformOutputValue(this.value, this.innerContent)
-      if (Object.prototype.hasOwnProperty.call(data, 'select-input')) {
-        data[data['select-input'].id] = data['select-input'].value
-        delete data['select-input']
-      }
+      // 对 select-input 类型的id 单独处理
+      this.selectInputIds.forEach(selectInputId => {
+        if (Object.prototype.hasOwnProperty.call(data, selectInputId)) {
+          data[data[selectInputId].id] = data[selectInputId].value
+          delete data[selectInputId]
+        }
+      })
       return data
     },
     /**
